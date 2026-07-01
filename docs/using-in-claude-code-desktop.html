@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code Toolkit — Desktop-app-first Guide</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2a3441; --accent:#7c9cff; --accent2:#5eead4; --warn:#f0b429; --bad:#ff6b6b;
+    --good:#3fb950; --code:#0b0f16; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0f16,#0d1117 40%);color:var(--ink);
+    font-family:var(--sans);line-height:1.6;font-size:16px}
+  .wrap{max-width:980px;margin:0 auto;padding:48px 24px 96px}
+  header.hero{border:1px solid var(--line);border-radius:var(--radius);
+    background:radial-gradient(1200px 400px at 20% -10%,rgba(124,156,255,.18),transparent),var(--panel);
+    padding:40px 36px;margin-bottom:32px}
+  .badge{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent2);border:1px solid var(--line);
+    border-radius:999px;padding:4px 12px;margin-bottom:18px}
+  h1{font-size:34px;line-height:1.15;margin:0 0 12px}
+  h1 .sub{color:var(--accent)}
+  .lede{color:var(--muted);font-size:18px;margin:0;max-width:70ch}
+  h2{font-size:24px;margin:44px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:var(--accent2)}
+  p{margin:12px 0}
+  code{font-family:var(--mono);font-size:.9em;background:var(--code);border:1px solid var(--line);
+    border-radius:6px;padding:1px 6px;color:#d7e0ea}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+    overflow:auto;font-family:var(--mono);font-size:13.5px;line-height:1.55;color:#d7e0ea}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;margin:16px 0}
+  .grid{display:grid;gap:16px}
+  @media(min-width:720px){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:1fr 1fr 1fr}}
+  .step{display:flex;gap:14px;align-items:flex-start;margin:14px 0}
+  .num{flex:0 0 30px;height:30px;border-radius:50%;background:var(--accent);color:#0b0f16;
+    font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase}
+  .ok{color:var(--good);font-weight:600}.no{color:var(--bad);font-weight:600}.mid{color:var(--warn);font-weight:600}
+  ul{margin:10px 0;padding-left:22px}li{margin:6px 0}
+  .kbd{font-family:var(--mono);background:var(--panel2);border:1px solid var(--line);
+    border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:.85em}
+  .note{border-left:3px solid var(--accent);background:var(--panel2);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:16px 0;color:#cdd8e3}
+  .warnbox{border-left:3px solid var(--warn);background:rgba(240,180,41,.08);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:16px 0}
+  .pill{font-family:var(--mono);font-size:12px;color:var(--accent);border:1px solid var(--line);
+    border-radius:6px;padding:2px 8px;display:inline-block;margin:2px 4px 2px 0;background:var(--code)}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  a{color:var(--accent)}
+  svg{max-width:100%;height:auto}
+  .cap{color:var(--muted);font-size:13px;text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">Desktop-app-first · v2.0.0 · no CLI required</span>
+    <h1>Claude Code Toolkit<br><span class="sub">for the Desktop app (Code tab)</span></h1>
+    <p class="lede">One app-focused configuration you install from the Plugin manager — bounded-build
+    workflow, always-on operating rules, safety hooks, tailored subagents, and an in-session
+    <code>/review</code>. Built to keep Claude sharp deep into long sessions, entirely inside the
+    Claude Desktop app. No terminal, no <code>claude</code> CLI.</p>
+  </header>
+
+  <h2>Why this exists</h2>
+  <p>Large builds don't fail from lack of capability — they fail from <strong>context rot</strong>.
+  Model quality degrades as the context window fills: facts in the middle get lost, tool schemas eat
+  the budget, and late-session output gets sloppier. The toolkit's answer is to keep every working
+  session <strong>small and bounded</strong>, push durable state to disk, and verify each step. This
+  edition delivers all of that through the <strong>Desktop Code tab</strong>, which runs the same
+  Claude Code engine as the CLI and reads the same <code>~/.claude</code> config.</p>
+
+  <div class="card">
+    <svg viewBox="0 0 900 260" role="img" aria-label="Bounded build keeps context low per stage versus one long run that fills the window">
+      <defs>
+        <linearGradient id="fillbad" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#ff6b6b" stop-opacity=".5"/><stop offset="1" stop-color="#ff6b6b" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="fillgood" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#5eead4" stop-opacity=".45"/><stop offset="1" stop-color="#5eead4" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- axes -->
+      <line x1="60" y1="20" x2="60" y2="210" stroke="#2a3441"/>
+      <line x1="60" y1="210" x2="860" y2="210" stroke="#2a3441"/>
+      <text x="30" y="30" fill="#9aa7b4" font-size="11" font-family="monospace">100%</text>
+      <text x="42" y="214" fill="#9aa7b4" font-size="11" font-family="monospace">0</text>
+      <text x="360" y="238" fill="#9aa7b4" font-size="12" font-family="monospace">time / work done &#8594;</text>
+      <line x1="60" y1="70" x2="860" y2="70" stroke="#2a3441" stroke-dasharray="3 6"/>
+      <text x="670" y="64" fill="#f0b429" font-size="11" font-family="monospace">quality starts to drop</text>
+      <!-- one long run: fills up and stays high (bad) -->
+      <path d="M60,205 C240,205 300,90 520,70 C680,58 780,48 860,44 L860,210 L60,210 Z" fill="url(#fillbad)"/>
+      <path d="M60,205 C240,205 300,90 520,70 C680,58 780,48 860,44" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
+      <text x="600" y="96" fill="#ff6b6b" font-size="12" font-family="monospace">one long run (context fills)</text>
+      <!-- bounded sawtooth: resets each stage (good) -->
+      <path d="M60,205 L150,150 L150,205 L240,150 L240,205 L330,150 L330,205 L420,150 L420,205 L510,150 L510,205 L600,150 L600,205 L690,150 L690,205 L780,150 L780,205 L860,150"
+            fill="none" stroke="#5eead4" stroke-width="2.5"/>
+      <text x="120" y="130" fill="#5eead4" font-size="12" font-family="monospace">bounded build (reset each stage)</text>
+    </svg>
+    <p class="cap">Illustrative. Each <code>/stage</code> runs in a fresh context, so usage stays in the
+    healthy band instead of climbing until quality falls off.</p>
+  </div>
+
+  <h2>Install in ~2 minutes (no terminal)</h2>
+  <div class="card">
+    <div class="step"><div class="num">1</div><div>
+      <strong>Install the plugin.</strong> In the Desktop app open the <span class="kbd">Code</span> tab,
+      click the <span class="kbd">+</span> next to the prompt box &#8594; <strong>Plugins</strong> &#8594;
+      <strong>Add plugin</strong>. Add this repo/folder as a marketplace (it contains
+      <code>.claude-plugin/marketplace.json</code>), then install <code>claude-code-toolkit</code>.
+      This delivers all commands, agents, skills, and hooks.
+    </div></div>
+    <div class="step"><div class="num">2</div><div>
+      <strong>Add the always-on memory (one-time).</strong> Open <code>~/.claude/CLAUDE.md</code> in the
+      file pane and paste the contents of <code>reference/CLAUDE.md</code>. The Code tab reads this on
+      every session. Optional: copy <code>output-styles/terse-engineer.md</code> into
+      <code>~/.claude/output-styles/</code> and select it. (Windows shortcut: run
+      <code>reference/install-memory.ps1</code> once — it only copies these files, it does not use the CLI.)
+    </div></div>
+    <div class="step"><div class="num">3</div><div>
+      <strong>Verify.</strong> Type <code>/</code> in the prompt box; you should see <code>/plan</code>,
+      <code>/stage</code>, <code>/handoff</code>, <code>/verify</code>, <code>/review</code>,
+      <code>/ship</code>. Under <span class="kbd">+</span> &#8594; <strong>Skills</strong> you should see
+      <code>bounded-build</code>, <code>operating-rules</code>, <code>review</code>.
+    </div></div>
+    <div class="warnbox"><strong>Windows prereq:</strong> the first time you open the Code tab you need
+    <a href="https://git-scm.com/downloads/win">Git for Windows</a> installed; restart the app afterward.</div>
+  </div>
+
+  <h2>The Code tab, at a glance</h2>
+  <p>The Code tab is built around <strong>panes</strong> you arrange freely. The toolkit is designed
+  to use them:</p>
+  <div class="grid two">
+    <div class="card"><h3>Panes you'll use</h3>
+      <p><span class="pill">chat</span><span class="pill">plan</span><span class="pill">diff</span>
+      <span class="pill">tasks</span><span class="pill">subagent</span><span class="pill">file</span></p>
+      <ul>
+        <li><strong>plan</strong> — track the bounded-build plan while you work.</li>
+        <li><strong>diff</strong> — review a stage's changes before <code>/ship</code>.</li>
+        <li><strong>tasks</strong> — see subagents and background work spawned during a stage.</li>
+        <li><strong>subagent</strong> — watch a delegated review/verify run in its own context.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The + button</h3>
+      <p>Everything installs and is invoked from here:</p>
+      <ul>
+        <li><strong>Skills</strong> — browse/invoke <code>bounded-build</code>, <code>review</code>,
+          <code>operating-rules</code> (or just type <code>/</code>).</li>
+        <li><strong>Plugins</strong> — add this marketplace, manage installs.</li>
+        <li><strong>Connectors</strong> — MCP servers with a graphical setup.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>The bounded-build loop</h2>
+  <div class="card">
+    <svg viewBox="0 0 900 150" role="img" aria-label="plan, stage, handoff, clear, verify, ship loop">
+      <g font-family="monospace" font-size="13">
+        <!-- boxes -->
+        <g>
+          <rect x="20"  y="50" width="110" height="46" rx="9" fill="#1c2330" stroke="#7c9cff"/>
+          <text x="75"  y="78" fill="#e6edf3" text-anchor="middle">/plan</text>
+          <rect x="170" y="50" width="120" height="46" rx="9" fill="#1c2330" stroke="#5eead4"/>
+          <text x="230" y="78" fill="#e6edf3" text-anchor="middle">/stage N</text>
+          <rect x="330" y="50" width="120" height="46" rx="9" fill="#1c2330" stroke="#5eead4"/>
+          <text x="390" y="78" fill="#e6edf3" text-anchor="middle">/handoff</text>
+          <rect x="490" y="50" width="110" height="46" rx="9" fill="#1c2330" stroke="#f0b429"/>
+          <text x="545" y="78" fill="#e6edf3" text-anchor="middle">/clear</text>
+          <rect x="640" y="50" width="110" height="46" rx="9" fill="#1c2330" stroke="#7c9cff"/>
+          <text x="695" y="78" fill="#e6edf3" text-anchor="middle">/verify</text>
+          <rect x="790" y="50" width="90" height="46" rx="9" fill="#1c2330" stroke="#3fb950"/>
+          <text x="835" y="78" fill="#e6edf3" text-anchor="middle">/ship</text>
+        </g>
+        <g stroke="#9aa7b4" fill="none">
+          <path d="M130,73 L168,73" marker-end="url(#a)"/>
+          <path d="M290,73 L328,73" marker-end="url(#a)"/>
+          <path d="M450,73 L488,73" marker-end="url(#a)"/>
+          <path d="M600,73 L638,73" marker-end="url(#a)"/>
+          <path d="M750,73 L788,73" marker-end="url(#a)"/>
+          <!-- loop back stage<-clear -->
+          <path d="M545,50 C545,20 230,20 230,48" stroke="#f0b429" stroke-dasharray="4 5"/>
+        </g>
+        <text x="360" y="16" fill="#f0b429" font-size="11">repeat per stage (fresh context each time)</text>
+        <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="#9aa7b4"/></marker></defs>
+      </g>
+    </svg>
+  </div>
+  <p><code>/plan &lt;goal&gt;</code> writes <code>BUILD_PLAN.md</code> + <code>BUILD_STATE.md</code> and
+  stops. Each <code>/stage N</code> builds one plan stage, verifies it, appends a handoff log, and stops.
+  You <code>/clear</code> (or open a fresh Code-tab session) between stages so context never piles up.
+  Disk is the source of truth — a brand-new session resumes from the two state files alone.</p>
+  <div class="note">The single most important habit: <strong>one stage per session</strong>. If a stage
+  feels bigger than one context window, split it in the plan first.</div>
+
+  <h2>Review before every commit</h2>
+  <p>The Desktop Code tab can't run headless <code>claude -p</code>, so instead of a background git hook
+  the toolkit reviews <strong>in your session</strong>, where you can see the diff and approve.</p>
+  <div class="card">
+    <p><strong>Run</strong> <code>/review</code> before committing. It:</p>
+    <ul>
+      <li>reads your staged/uncommitted diff and checks it for <strong>secrets, injection,
+        correctness, error handling, PII in logs, Windows path safety, and missing tests</strong>;</li>
+      <li>emits a <code>VERDICT: APPROVE | REQUEST_CHANGES | REJECT</code> with
+        <code>file:line</code> findings and concrete fixes;</li>
+      <li>for risky changes, hands off to the <code>review-agent</code> subagent for a second opinion in
+        a separate context (watch it in the <strong>subagent</strong> pane);</li>
+      <li>on approval, stages files <em>by name</em> and writes an imperative commit with a "why" body.
+        It never uses <code>--no-verify</code> / <code>--force</code> unless you explicitly say so.</li>
+    </ul>
+  </div>
+
+  <h2>What's in the box</h2>
+  <table>
+    <tr><th>Piece</th><th>Type</th><th>Use</th></tr>
+    <tr><td><code>/plan /stage /handoff /verify /reset /ship /trim</code></td><td>commands</td><td>the bounded-build workflow</td></tr>
+    <tr><td><code>/review</code></td><td>skill</td><td>in-session pre-commit review</td></tr>
+    <tr><td><code>bounded-build</code>, <code>operating-rules</code></td><td>skills</td><td>protocol + rules of engagement</td></tr>
+    <tr><td>planner · verifier · researcher · debugger</td><td>subagents</td><td>plan, verify, research, debug in isolated context</td></tr>
+    <tr><td>security-reviewer · review-agent</td><td>subagents</td><td>second-opinion security/code review</td></tr>
+    <tr><td>network-infra · web-cloudflare</td><td>subagents</td><td>network &amp; edge experts</td></tr>
+    <tr><td>danger-check · secret-scan · session-start</td><td>hooks</td><td>block destructive commands, block secret writes, prime each session</td></tr>
+    <tr><td>terse-engineer</td><td>output style</td><td>direct, rules-baked-in voice</td></tr>
+  </table>
+
+  <h2>Desktop vs CLI — what's honored where</h2>
+  <p>Per Anthropic's docs, the Desktop app and CLI share the same engine and the same
+  <code>~/.claude</code> config. Everything this toolkit ships is honored in the Code tab; the only
+  gaps are genuinely CLI-only features it deliberately avoids.</p>
+  <table>
+    <tr><th>Capability</th><th>Desktop Code tab</th><th>Notes</th></tr>
+    <tr><td>CLAUDE.md + rules</td><td class="ok">Yes</td><td>shared user memory</td></tr>
+    <tr><td>settings.json (perms, hooks, model, env)</td><td class="ok">Yes</td><td>same file</td></tr>
+    <tr><td>Skills / subagents / slash commands</td><td class="ok">Yes</td><td>subagent pane; type <code>/</code></td></tr>
+    <tr><td>Plugins (marketplace)</td><td class="ok">Yes — no terminal</td><td>Plugin manager UI</td></tr>
+    <tr><td>MCP / connectors</td><td class="ok">Yes</td><td>Connectors UI or settings</td></tr>
+    <tr><td>Recurring automation</td><td class="ok">Yes</td><td>Desktop <strong>Scheduled tasks</strong></td></tr>
+    <tr><td>statusLine</td><td class="mid">Not surfaced</td><td>Desktop shows its own status UI; harmless if left in settings</td></tr>
+    <tr><td>Headless <code>claude -p</code> / Agent SDK</td><td class="no">Not available</td><td>replaced by <code>/review</code>; keep SDK work in a separate CLI repo</td></tr>
+    <tr><td><code>/permissions /config /agents /doctor</code></td><td class="no">Terminal-only dialogs</td><td>use <strong>Customize</strong> sidebar + Settings instead</td></tr>
+  </table>
+
+  <h2>Recurring automation → Scheduled tasks</h2>
+  <p>Anything you'd have cron'd or run via the Agent SDK on the CLI, do with the Desktop app's
+  <strong>Scheduled tasks</strong> instead (a nightly review sweep, a weekly digest, a health check).
+  It's the desktop-native equivalent and needs no terminal. See
+  <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks">Scheduled tasks</a>.</p>
+
+  <h2>Troubleshooting</h2>
+  <ul>
+    <li><strong>A new command doesn't appear</strong> after installing the plugin — restart the Code tab.</li>
+    <li><strong>Windows, first Code-tab launch fails</strong> — install Git for Windows, then restart the app.</li>
+    <li><strong><code>/agents</code> says "isn't available"</strong> — that's a terminal-only dialog; manage
+      subagents from <strong>Customize</strong> in the sidebar.</li>
+    <li><strong>A hook seems to block something legitimate</strong> — the guards are conservative and
+      fail-open; run the exact command yourself outside Claude Code, or adjust the pattern in
+      <code>hooks/</code>.</li>
+    <li><strong>MCP server won't connect on Windows</strong> — verify config, restart the app, check the
+      process in Task Manager.</li>
+  </ul>
+
+  <footer>
+    <p><strong>Sources.</strong>
+      <a href="https://code.claude.com/docs/en/desktop">Claude Code Desktop app</a> ·
+      <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks">Desktop scheduled tasks</a> ·
+      <a href="https://code.claude.com/docs/en/plugins">Plugins</a> ·
+      <a href="https://code.claude.com/docs/en/hooks">Hooks</a> ·
+      <a href="https://code.claude.com/docs/en/memory">Memory / CLAUDE.md</a>.
+      Context-rot framing per Chroma "Context Rot" (2025) and Anthropic "Effective context engineering."</p>
+    <p>Claude Code Toolkit — Desktop-app-first edition · v2.0.0</p>
+  </footer>
+
+</div>
+</body>
+</html>

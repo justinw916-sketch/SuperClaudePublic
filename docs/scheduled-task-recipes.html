@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scheduled-Task Recipes — Claude Code Toolkit</title>
+<style>
+  :root{
+    --bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--ink:#e6edf3;--muted:#9aa7b4;
+    --line:#2a3441;--accent:#7c9cff;--accent2:#5eead4;--warn:#f0b429;--good:#3fb950;
+    --code:#0b0f16;--radius:14px;--mono:ui-monospace,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0f16,#0d1117 40%);color:var(--ink);
+    font-family:var(--sans);line-height:1.6}
+  .wrap{max-width:940px;margin:0 auto;padding:48px 24px 96px}
+  header.hero{border:1px solid var(--line);border-radius:var(--radius);
+    background:radial-gradient(1000px 360px at 15% -10%,rgba(94,234,212,.16),transparent),var(--panel);
+    padding:36px 32px;margin-bottom:28px}
+  .badge{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent2);border:1px solid var(--line);border-radius:999px;
+    padding:4px 12px;margin-bottom:16px}
+  h1{font-size:30px;margin:0 0 10px}
+  .lede{color:var(--muted);font-size:17px;margin:0;max-width:70ch}
+  h2{font-size:22px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:0 0 4px;color:var(--accent2)}
+  p{margin:12px 0}
+  code{font-family:var(--mono);font-size:.9em;background:var(--code);border:1px solid var(--line);
+    border-radius:6px;padding:1px 6px;color:#d7e0ea}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+    overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.55;color:#d7e0ea;white-space:pre-wrap}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;margin:18px 0}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
+  .pill{font-family:var(--mono);font-size:12px;color:var(--accent);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px;background:var(--code)}
+  .pill.warn{color:var(--warn)}.pill.good{color:var(--good)}
+  ul{margin:10px 0;padding-left:22px}li{margin:6px 0}
+  .kbd{font-family:var(--mono);background:var(--panel2);border:1px solid var(--line);
+    border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:.85em}
+  .note{border-left:3px solid var(--accent);background:var(--panel2);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:16px 0;color:#cdd8e3}
+  .warnbox{border-left:3px solid var(--warn);background:rgba(240,180,41,.08);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:16px 0}
+  .label{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;
+    letter-spacing:.05em;margin:14px 0 4px}
+  footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">Desktop Scheduled Tasks · ready to paste</span>
+    <h1>Scheduled-task recipes</h1>
+    <p class="lede">The Desktop app can run a saved prompt on a schedule — the app-native replacement for
+    cron jobs and Agent-SDK automations (which are CLI-only). Below are three ready-to-paste tasks that
+    build on this toolkit. Copy the prompt, set the cadence, point it at a project, done.</p>
+  </header>
+
+  <h2>How to add a scheduled task</h2>
+  <div class="card">
+    <ul>
+      <li>In the Desktop app, open <strong>Scheduled tasks</strong> (via the app's scheduled-tasks
+        feature — see the <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks">docs</a>).</li>
+      <li>Create a new task, set its <strong>schedule</strong> (daily/weekly + time) and its
+        <strong>working project</strong> (the folder it runs against).</li>
+      <li>Paste one of the prompts below as the task's instruction. Save.</li>
+    </ul>
+    <div class="warnbox"><strong>Safety by design.</strong> These recipes are <em>read + report</em> by
+    default — they never commit, push, or delete on their own. They surface findings for you to act on in
+    a live session. The <code>danger-check</code> and <code>secret-scan</code> hooks still apply.</div>
+  </div>
+
+  <h2>1 · Nightly <code>/review</code> sweep</h2>
+  <div class="card">
+    <h3>Catch risky uncommitted changes before you forget what they were</h3>
+    <div class="meta">
+      <span class="pill">Cadence: daily · 6:00 PM</span>
+      <span class="pill">Scope: one active repo</span>
+      <span class="pill good">read-only report</span>
+    </div>
+    <div class="label">Paste as the task prompt</div>
+<pre>Review today's uncommitted work in this repo and flag anything risky before I lose context.
+
+1. Run: git status --short  and  git diff  (and git diff --staged).
+   If there are no changes, reply "No uncommitted changes." and stop.
+2. Apply the /review checklist: secrets, injection, unvalidated input, weak
+   randomness, missing error handling, PII in logs, Windows path safety, and
+   any new logic missing tests.
+3. Output a single VERDICT: APPROVE | REQUEST_CHANGES | REJECT, then a short
+   findings list as [BLOCKER]/[WARNING]/[NOTE] with file:line and a concrete fix each.
+4. Do NOT stage, commit, push, or edit anything. Report only.
+Keep it under ~250 words.</pre>
+    <p class="note">Change the time/scope to taste. If you keep several active repos, make one task each,
+    or generalize step 1 to loop over a list of paths.</p>
+  </div>
+
+  <h2>2 · Weekly build digest</h2>
+  <div class="card">
+    <h3>A Friday summary of what shipped, what's mid-flight, and what's next</h3>
+    <div class="meta">
+      <span class="pill">Cadence: weekly · Fri 4:00 PM</span>
+      <span class="pill">Scope: a project or repo</span>
+      <span class="pill good">read-only report</span>
+    </div>
+    <div class="label">Paste as the task prompt</div>
+<pre>Produce a one-page weekly digest for this project.
+
+1. Summarize the last 7 days of git history: run
+   git log --since="7 days ago" --pretty=format:"%h %ad %s" --date=short
+   Group commits into themes (features, fixes, chores).
+2. If BUILD_STATE.md exists, report the current bounded-build stage, what was
+   completed, and the next stage.
+3. List anything that looks unfinished or risky: TODO/FIXME added this week
+   (grep -rn "TODO\|FIXME" changed files), failing or missing tests, and any
+   stage stuck more than a few days.
+4. End with "Top 3 for next week" as a short prioritized list.
+Format: tight prose with a short bullet list only where it earns its place.
+Do not modify any files.</pre>
+    <p class="note">Pipe the output wherever you like afterward — the task can also draft it as a note or
+    message if you connect a relevant tool.</p>
+  </div>
+
+  <h2>3 · Daily bounded-build resume nudge</h2>
+  <div class="card">
+    <h3>Never lose the thread of a multi-stage build</h3>
+    <div class="meta">
+      <span class="pill">Cadence: daily · 8:30 AM</span>
+      <span class="pill">Scope: your current build repo</span>
+      <span class="pill good">read-only report</span>
+    </div>
+    <div class="label">Paste as the task prompt</div>
+<pre>Give me a 5-line resume brief for the bounded build in this repo.
+
+1. Read BUILD_PLAN.md and BUILD_STATE.md. If neither exists, reply
+   "No bounded build in progress." and stop.
+2. Report: current stage (done/in-progress), the single most important thing the
+   next session must know (from the latest handoff log), and the next stage's
+   deliverable + files it will touch.
+3. End with the exact command to resume, e.g. "Open a fresh Code-tab session and
+   run /stage N".
+Do not build anything. Brief only.</pre>
+  </div>
+
+  <h2>Tips</h2>
+  <ul>
+    <li><strong>Keep tasks read-only.</strong> Let them find and summarize; do the acting yourself in a
+      live session where you can see the diff pane.</li>
+    <li><strong>One task per repo/scope</strong> is clearer than one task that guesses which project you meant.</li>
+    <li><strong>Stagger times</strong> so tasks don't all fire at once.</li>
+    <li><strong>Escalate on demand:</strong> when a nightly sweep flags a BLOCKER, open the repo and run
+      <code>/review</code> live to fix it with full context.</li>
+  </ul>
+
+  <footer>
+    <p><strong>Sources.</strong>
+      <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks">Desktop scheduled tasks</a> ·
+      <a href="https://code.claude.com/docs/en/desktop">Claude Code Desktop app</a>.</p>
+    <p>Claude Code Toolkit — Desktop-app-first edition · v2.0.0</p>
+  </footer>
+
+</div>
+</body>
+</html>

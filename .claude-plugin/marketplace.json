@@ -1,0 +1,15 @@
+{
+  "name": "superclaude-public",
+  "owner": { "name": "SuperClaude" },
+  "metadata": {
+    "description": "Desktop-app-first Claude Code toolkit — public edition.",
+    "version": "2.0.0"
+  },
+  "plugins": [
+    {
+      "name": "claude-code-toolkit",
+      "source": "./",
+      "description": "Desktop-app-first toolkit: bounded-build workflow, operating rules, safety hooks, tailored subagents, and an in-session /review."
+    }
+  ]
+}
