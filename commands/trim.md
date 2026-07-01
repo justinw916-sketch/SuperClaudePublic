@@ -1,11 +1,15 @@
 ---
-description: Compress the working context mid-task without losing the thread.
+description: Audit the current session for token bloat and recommend a compaction strategy
 ---
 
-Context is getting heavy. Produce a tight continuation brief, then tell the user to
-`/compact` using it:
-- **Task**: one line.
-- **Done so far**: 3-6 bullets (decisions + file paths, not narration).
-- **Next step**: the immediate next action.
-- **Keep**: the few facts/paths that must survive compaction.
-- **Drop**: exploratory reads and dead ends.
+Analyze this session for token waste. Report:
+
+1. **Heaviest consumers** — which tool results or file reads ate the most tokens?
+2. **Redundancy** — any file read more than once, any repeated research, any correction loops?
+3. **Delegable work** — what should have gone to a subagent but stayed in the main thread?
+4. **Recommended action** — pick one:
+   - `/clear` and restart with a sharper prompt (if current task is polluted beyond saving)
+   - `/compact [specific instructions]` (if mid-task but bloated — give me the exact compact instruction to use)
+   - Continue as-is (if the weight is justified)
+
+One paragraph per section. No code, no tool calls beyond what's needed to check file state.
