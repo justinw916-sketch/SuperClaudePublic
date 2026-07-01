@@ -10,7 +10,7 @@ Pick either. ~2 minutes.
 3. Add the marketplace: `justinw916-sketch/SuperClaudePublic`
 4. Install the plugin **claude-code-toolkit**. Restart the Code tab if a new
    command doesn't appear.
-5. One-time memory: open `~/.claude/CLAUDE.md` in the file pane and paste the
+5. (Optional) Personalize identity — the operating rules already load automatically; to add your own identity, paste the
    contents of [`reference/CLAUDE.md`](reference/CLAUDE.md). (Windows shortcut:
    run `reference/install-memory.ps1` once — it does not use the CLI.)
 6. Verify: type `/` → you should see `/plan`, `/stage`, `/handoff`, `/verify`,

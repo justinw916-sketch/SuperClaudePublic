@@ -6,8 +6,8 @@
 
 1. Open the **Code** tab → **+ → Plugins → Add plugin**.
 2. Add marketplace `justinw916-sketch/SuperClaudePublic`, then install **claude-code-toolkit**.
-3. Fill in `reference/CLAUDE.md` and paste it into your `~/.claude/CLAUDE.md`.
-4. Restart the Code tab, then type `/` — you should see `/plan`, `/stage`, `/review`, etc.
+3. Restart the Code tab — done. The operating rules load automatically via the plugin; there are no files to edit.
+4. Type `/` — you should see `/plan`, `/stage`, `/review`, etc. (Optional: add your own `~/.claude/CLAUDE.md` to personalize identity.)
 
 Full steps: [DEPLOY.md](DEPLOY.md) · Rendered docs: https://justinw916-sketch.github.io/SuperClaudePublic/
 
@@ -32,11 +32,11 @@ Everything here is designed for the **Claude Desktop app -> Code tab**.
 | Operating rules | `operating-rules` skill + `terse-engineer` output style | plugin + `reference/` |
 | Tailored subagents | planner, verifier, researcher, debugger, security-reviewer, network-infra, web-cloudflare | plugin `agents/` |
 | Safety hooks | destructive-command guard, secret-scan, session primer | plugin `hooks/` |
-| Always-on memory | `CLAUDE.md` (paste into `~/.claude/CLAUDE.md`) | `reference/` |
+| Always-on rules | auto-injected each session (SessionStart hook) — zero setup | plugin `hooks/` |
 
-Two things the plugin cannot carry (they are user-memory, not plugin scope):
-your **`~/.claude/CLAUDE.md`** and, optionally, the **output style**. Both are a
-one-time copy — see step 2 below. Everything else installs with the plugin.
+The operating rules load automatically every session via the plugin SessionStart hook,
+so there is nothing to paste. A personal **`~/.claude/CLAUDE.md`** and the **output style** are an
+optional personalization. Everything else installs with the plugin.
 
 ---
 
@@ -55,7 +55,7 @@ one-time copy — see step 2 below. Everything else installs with the plugin.
 That installs all commands, agents, skills, and hooks. Restart the Code tab if a
 new command doesn't show up immediately.
 
-**Step 2 — Add the always-on memory (one-time copy):**
+**Step 2 — (Optional) personalize your identity:**
 
 Open `~/.claude/CLAUDE.md` in the Code tab's file editor (Windows:
 `C:\Users\<you>\.claude\CLAUDE.md`) and paste the contents of

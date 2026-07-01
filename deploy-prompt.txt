@@ -4,7 +4,7 @@ Set up my SuperClaude Claude Code toolkit on this machine.
    (in the Desktop app: + -> Plugins -> Add plugin -> add that repo;
     or CLI: claude plugin marketplace add justinw916-sketch/SuperClaudePublic)
 2. Install the plugin named "claude-code-toolkit" from that marketplace.
-3. Copy the operating rules from the repo's reference/CLAUDE.md into my
+3. (Optional) The core operating rules already load automatically via the plugin. Only to personalize identity, copy reference/CLAUDE.md into my
    ~/.claude/CLAUDE.md. If ~/.claude/CLAUDE.md already exists, back it up first
    (append a timestamp) before writing.
 4. If ~/.claude/commands/ already contains plan.md, stage.md, handoff.md,

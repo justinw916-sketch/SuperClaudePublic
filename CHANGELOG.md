@@ -9,6 +9,7 @@ Install it from the Plugin manager — no terminal, no CLI required. Identity is
 fill-in template, so you can make it your own.
 
 ### Included
+- **Zero-config rules:** the operating rules auto-load every session via the plugin SessionStart hook — no `~/.claude/CLAUDE.md` editing required (that file is optional personalization).
 - **Bounded-build workflow:** `/plan /stage /handoff /verify /reset /ship /trim`.
 - **In-session `/review`** + `review-agent` subagent — reviews your working diff
   in the Code tab and emits an APPROVE / REQUEST_CHANGES / REJECT verdict. No CI,

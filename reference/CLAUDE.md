@@ -1,5 +1,7 @@
 # Operating instructions — TEMPLATE (fill in your identity)
 
+> **Optional** — the plugin already loads these operating rules automatically each session (SessionStart hook); use this file only to add your own identity.
+
 > Copy this into your `~/.claude/CLAUDE.md` (Windows: `C:\Users\<you>\.claude\CLAUDE.md`).
 > The desktop Code tab reads it on every session — no terminal needed. Replace the
 > bracketed parts with your own details; the rules below are universal.

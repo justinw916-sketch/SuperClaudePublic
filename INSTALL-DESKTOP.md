@@ -15,8 +15,8 @@ marketplace -> install **claude-code-toolkit**.
 - Local folder marketplace: point at the folder containing
   `.claude-plugin/marketplace.json`.
 
-## 3. Add always-on memory (one-time)
-Open `~/.claude/CLAUDE.md` in the file pane and paste `reference/CLAUDE.md`.
+## 3. (Optional) Personalize identity
+The operating rules load automatically via the plugin. To personalize, paste `reference/CLAUDE.md` into `~/.claude/CLAUDE.md`.
 (Optional Windows shortcut: run `reference/install-memory.ps1` once.)
 
 ## 4. Verify
