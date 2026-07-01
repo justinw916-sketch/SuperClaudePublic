@@ -1,7 +1,7 @@
 {
   "name": "claude-code-toolkit",
   "displayName": "Claude Code Toolkit (Desktop-app-first)",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Desktop-app-first Claude Code toolkit: bounded-build workflow (/plan /stage /handoff /verify), always-on operating rules, deterministic safety hooks, tailored subagents, and an in-session /review. Installs from the desktop Plugin manager with no terminal.",
   "homepage": "https://github.com/justinw916-sketch/SuperClaudePublic",
   "repository": "https://github.com/justinw916-sketch/SuperClaudePublic",

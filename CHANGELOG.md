@@ -2,7 +2,7 @@
 
 All notable changes to the Claude Code Toolkit (public edition).
 
-## [2.0.0] — Desktop-app-first edition
+## [2.1.0] — Desktop-app-first edition
 
 A plugin-first Claude Code toolkit built for the **Claude Desktop app (Code tab)**.
 Install it from the Plugin manager — no terminal, no CLI required. Identity is a
