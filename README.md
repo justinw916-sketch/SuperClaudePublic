@@ -1,5 +1,18 @@
 # Claude Code Toolkit — Desktop-app-first edition (v2.0.0)
 
+[![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-7c9cff)](https://github.com/justinw916-sketch/SuperClaudePublic) [![License: MIT](https://img.shields.io/badge/License-MIT-3fb950.svg)](LICENSE) [![Docs](https://img.shields.io/badge/docs-GitHub_Pages-5eead4)](https://justinw916-sketch.github.io/SuperClaudePublic/)
+
+## Quickstart — Claude Desktop app (no terminal)
+
+1. Open the **Code** tab → **+ → Plugins → Add plugin**.
+2. Add marketplace `justinw916-sketch/SuperClaudePublic`, then install **claude-code-toolkit**.
+3. Fill in `reference/CLAUDE.md` and paste it into your `~/.claude/CLAUDE.md`.
+4. Restart the Code tab, then type `/` — you should see `/plan`, `/stage`, `/review`, etc.
+
+Full steps: [DEPLOY.md](DEPLOY.md) · Rendered docs: https://justinw916-sketch.github.io/SuperClaudePublic/
+
+---
+
 A single, app-focused Claude Code configuration you install from the **Desktop
 Plugin manager** — no terminal, no CLI. It keeps Claude sharp deep into long
 sessions with a bounded-build workflow, always-on operating rules, deterministic
