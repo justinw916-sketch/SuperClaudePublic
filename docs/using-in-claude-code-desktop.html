@@ -201,7 +201,7 @@
   <div class="note">The single most important habit: <strong>one stage per session</strong>. If a stage
   feels bigger than one context window, split it in the plan first.</div>
 
-  <h2>Auto-advance the whole build — <code>/build-all</code></h2>
+  <h2>Auto-advance the whole build — <code>/build-all</code> &amp; <code>/build-all-auto</code></h2>
   <p>Running <code>/stage 1</code> → <code>/clear</code> → <code>/stage 2</code> by hand is safe but tedious.
   <code>/build-all</code> automates it <em>without</em> reintroducing context rot: it hands each stage to a
   fresh <code>stage-runner</code> <strong>subagent</strong>, so every stage still gets its own clean context —
@@ -220,6 +220,20 @@
     <p>Watch progress in the <strong>subagent / tasks</strong> pane. For a hands-off run, switch the app to
     <strong>Auto</strong> permission mode so it doesn't pause for tool approvals each stage.</p>
   </div>
+  <h3>Checkpoint (<code>/build-all</code>) vs full-auto (<code>/build-all-auto</code>)</h3>
+  <p>Both run each stage in its own fresh-context subagent and <strong>halt on the first stage whose exit
+  criterion isn't met</strong> — they differ only in how much they involve you as they go.</p>
+  <table>
+    <tr><th></th><th><code>/build-all</code> — checkpoint</th><th><code>/build-all-auto</code> — full-auto</th></tr>
+    <tr><td>After each stage</td><td>posts a 2–3 line checkpoint, then continues on success</td><td>nothing — runs straight through silently</td></tr>
+    <tr><td>Output</td><td>running commentary you can eyeball and steer</td><td>a single report at the very end</td></tr>
+    <tr><td>Halt on failure</td><td class="ok">yes</td><td class="ok">yes (identical gate)</td></tr>
+    <tr><td>Best for</td><td>the default — newer/unfamiliar plans, when you want visibility</td><td>proven, repeatable plans with low-risk, reversible stages; walk-away runs</td></tr>
+  </table>
+  <div class="note"><strong>Rule of thumb:</strong> start with <code>/build-all</code> so you see each stage as
+  it lands; switch to <code>/build-all-auto</code> only once the plan is proven and you're happy to walk away.
+  Both stop cold on a failed stage — full-auto never means "ignore failures."</div>
+
   <h3>Automatic (<code>/build-all</code>) vs manual (<code>/stage</code> + <code>/clear</code>)</h3>
   <table>
     <tr><th>Use automatic <code>/build-all</code> when…</th><th>Drive it manually when…</th></tr>
