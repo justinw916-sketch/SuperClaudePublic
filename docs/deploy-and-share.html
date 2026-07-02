@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code Toolkit — Deploy &amp; Share Guide</title>
+<style>
+  :root{
+    --bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--ink:#e6edf3;--muted:#9aa7b4;
+    --line:#2a3441;--accent:#7c9cff;--accent2:#5eead4;--warn:#f0b429;--bad:#ff6b6b;
+    --good:#3fb950;--code:#0b0f16;--radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0f16,#0d1117 40%);color:var(--ink);
+    font-family:var(--sans);line-height:1.6;font-size:16px}
+  .wrap{max-width:1000px;margin:0 auto;padding:44px 24px 96px}
+  header.hero{border:1px solid var(--line);border-radius:var(--radius);
+    background:radial-gradient(1200px 400px at 20% -10%,rgba(124,156,255,.18),transparent),var(--panel);
+    padding:38px 34px;margin-bottom:28px}
+  .badge{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent2);border:1px solid var(--line);border-radius:999px;
+    padding:4px 12px;margin-bottom:16px}
+  h1{font-size:32px;line-height:1.15;margin:0 0 12px}
+  .lede{color:var(--muted);font-size:18px;margin:0;max-width:72ch}
+  nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
+  nav.toc a{font-size:13px;color:var(--accent);border:1px solid var(--line);border-radius:8px;
+    padding:5px 10px;text-decoration:none;background:var(--code)}
+  h2{font-size:24px;margin:46px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line);scroll-margin-top:16px}
+  h3{font-size:18px;margin:26px 0 8px;color:var(--accent2)}
+  p{margin:12px 0}
+  code{font-family:var(--mono);font-size:.9em;background:var(--code);border:1px solid var(--line);
+    border-radius:6px;padding:1px 6px;color:#d7e0ea}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+    overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.55;color:#d7e0ea;white-space:pre-wrap}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:16px 0}
+  .grid{display:grid;gap:16px}
+  @media(min-width:760px){.grid.two{grid-template-columns:1fr 1fr}}
+  .step{display:flex;gap:14px;align-items:flex-start;margin:14px 0}
+  .num{flex:0 0 30px;height:30px;border-radius:50%;background:var(--accent);color:#0b0f16;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase}
+  .ok{color:var(--good);font-weight:600}.no{color:var(--bad);font-weight:600}.mid{color:var(--warn);font-weight:600}
+  ul,ol{margin:10px 0;padding-left:22px}li{margin:6px 0}
+  .kbd{font-family:var(--mono);background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;
+    border-radius:6px;padding:1px 7px;font-size:.85em}
+  .note{border-left:3px solid var(--accent);background:var(--panel2);border-radius:0 10px 10px 0;padding:12px 16px;margin:16px 0;color:#cdd8e3}
+  .warnbox{border-left:3px solid var(--warn);background:rgba(240,180,41,.08);border-radius:0 10px 10px 0;padding:12px 16px;margin:16px 0}
+  .pill{font-family:var(--mono);font-size:12px;color:var(--accent);border:1px solid var(--line);border-radius:6px;padding:2px 8px;display:inline-block;margin:2px 4px 2px 0;background:var(--code)}
+  footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">Deploy &amp; Share · v2.3.0 · Code tab + Cowork</span>
+    <h1>Claude Code Toolkit — Deploy &amp; Share</h1>
+    <p class="lede">Everything you need to install this toolkit on your own machines and share it with
+    others — across <strong>both surfaces</strong> of the Claude Desktop app: the <strong>Code tab</strong>
+    (via a plugin) and <strong>Cowork</strong> (via skills). No terminal required.</p>
+    <nav class="toc">
+      <a href="#surfaces">Two surfaces</a>
+      <a href="#inside">What's included</a>
+      <a href="#deploy">Deploy on your machines</a>
+      <a href="#share">Share with a friend</a>
+      <a href="#update">Update to latest</a>
+      <a href="#workflow">The workflow</a>
+      <a href="#why">Why it saves tokens</a>
+      <a href="#trouble">Troubleshooting</a>
+    </nav>
+  </header>
+
+  <h2 id="surfaces">The two surfaces</h2>
+  <p>The Claude Desktop app has two places you build with Claude, and the toolkit ships for each:</p>
+  <table>
+    <tr><th>Surface</th><th>What it is</th><th>How the toolkit ships</th><th>You use</th></tr>
+    <tr><td><strong>Code tab</strong></td><td>the software-development tab (slash commands, panes)</td><td>a <strong>plugin</strong> (marketplace install)</td><td><code>/plan</code> <code>/build-all</code> <code>/review</code> …</td></tr>
+    <tr><td><strong>Cowork</strong></td><td>the agent-mode tab for longer autonomous work</td><td><strong>skills</strong> (<code>.skill</code> files)</td><td><code>bounded-build</code>, <code>code-review</code></td></tr>
+  </table>
+  <div class="note">Same ideas, different packaging: the Code tab uses slash commands from a plugin; Cowork
+  uses skills. Both keep Claude sharp on long work by <strong>running each stage in its own subagent</strong>
+  so the main context stays small.</div>
+
+  <h2 id="inside">What's included</h2>
+  <div class="grid two">
+    <div class="card"><h3>Code-tab plugin (<code>claude-code-toolkit</code>)</h3>
+      <ul>
+        <li><strong>Bounded-build:</strong> <code>/plan /stage /handoff /verify /reset /ship /trim</code></li>
+        <li><strong>Auto-advance:</strong> <code>/build-all</code> (checkpoint) &amp; <code>/build-all-auto</code> (full-auto)</li>
+        <li><strong>In-session review:</strong> <code>/review</code> + <code>review-agent</code></li>
+        <li><strong>Subagents:</strong> planner, verifier, researcher, debugger, security-reviewer, network-infra, web-cloudflare, stage-runner</li>
+        <li><strong>Safety hooks:</strong> destructive-command guard, secret-scan, session primer (auto-loads the operating rules)</li>
+        <li><strong>Output style:</strong> terse-engineer</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Cowork skills (<code>cowork/</code>)</h3>
+      <ul>
+        <li><strong>bounded-build</strong> — plan to disk, run each stage in a subagent; checkpoint or full-auto; halts on a failed exit criterion.</li>
+        <li><strong>code-review</strong> — reviews your working <code>git diff</code>; emits <code>APPROVE / REQUEST_CHANGES / REJECT</code> with <code>file:line</code> findings.</li>
+      </ul>
+      <p>Delivered as installable <code>.skill</code> files plus editable source folders.</p>
+    </div>
+  </div>
+
+  <h2 id="deploy">Deploy on your own machines</h2>
+
+  <h3>A · Code tab (the plugin) — no terminal</h3>
+  <div class="card">
+    <div class="step"><div class="num">1</div><div>Open the Claude Desktop app → <span class="kbd">Code</span> tab → <span class="kbd">+</span> → <strong>Plugins</strong> → <strong>Add plugin</strong>.</div></div>
+    <div class="step"><div class="num">2</div><div>Add the marketplace <code>justinw916-sketch/SuperClaudePublic</code>, then install <strong>claude-code-toolkit</strong>.</div></div>
+    <div class="step"><div class="num">3</div><div><strong>Fully quit and reopen the app</strong> (tray/menu-bar → Quit). Plugin changes only apply after a full restart.</div></div>
+    <div class="step"><div class="num">4</div><div>Verify: type <code>/</code> → you should see <code>/plan</code>, <code>/build-all</code>, <code>/review</code>, etc. The operating rules load automatically (SessionStart hook) — nothing to paste.</div></div>
+    <div class="warnbox"><strong>Windows:</strong> the first Code-tab launch needs <a href="https://git-scm.com/downloads/win">Git for Windows</a> installed; restart the app after installing.</div>
+  </div>
+
+  <h3>B · Cowork (the skills)</h3>
+  <div class="card">
+    <div class="step"><div class="num">1</div><div>Get the two skill packages from the repo's <code>cowork/</code> folder: <code>bounded-build.skill</code> and <code>code-review.skill</code>.</div></div>
+    <div class="step"><div class="num">2</div><div>In Cowork, open each <code>.skill</code> file and click <strong>Save skill</strong>. (You only need to save each once — if it asks to “replace”, that just means it's already saved.)</div></div>
+    <div class="step"><div class="num">3</div><div>Use them by describing a substantial build (<code>bounded-build</code> triggers) or asking to “review my changes” (<code>code-review</code> triggers).</div></div>
+  </div>
+
+  <h3>C · (Optional) personal identity</h3>
+  <p>The operating rules load automatically via the plugin, so this is optional. To personalize, paste
+  <code>reference/CLAUDE.md</code> into your <code>~/.claude/CLAUDE.md</code> and fill in your name/stack.</p>
+
+  <h2 id="share">Share with a friend</h2>
+  <p>Everything lives in the public repo <strong><a href="https://github.com/justinw916-sketch/SuperClaudePublic">github.com/justinw916-sketch/SuperClaudePublic</a></strong> (MIT-licensed, no personal data in files or git history).</p>
+  <div class="grid two">
+    <div class="card"><h3>For their Code tab</h3>
+      <p>They do the same 4 steps as above: <span class="kbd">+</span> → Plugins → Add plugin → add <code>justinw916-sketch/SuperClaudePublic</code> → install → restart.</p>
+    </div>
+    <div class="card"><h3>For their Cowork</h3>
+      <p>Send them the two <code>cowork/*.skill</code> files (or point them at the repo's <code>cowork/</code> folder). They open each and click <strong>Save skill</strong>.</p>
+    </div>
+  </div>
+  <div class="note">Rendered docs are public at <a href="https://justinw916-sketch.github.io/SuperClaudePublic/">justinw916-sketch.github.io/SuperClaudePublic</a> — hand your friend that link and they can read everything without cloning.</div>
+
+  <h2 id="update">Update to the latest version</h2>
+  <p>Plugins don't auto-update. When a new version ships (this is <strong>v2.3.0</strong>):</p>
+  <div class="grid two">
+    <div class="card"><h3>Code tab</h3>
+      <ol>
+        <li><span class="kbd">+</span> → Plugins → <strong>claude-code-toolkit</strong> → <strong>Update</strong> if shown.</li>
+        <li>No update button? <strong>Remove</strong> the marketplace, <strong>re-add</strong> it, then <strong>reinstall</strong> — re-adding forces a fresh pull.</li>
+        <li><strong>Fully restart</strong> the app.</li>
+      </ol>
+      <p>CLI equivalent (if used):</p>
+      <pre>claude plugin marketplace update superclaude-public
+claude plugin update claude-code-toolkit@superclaude-public
+# then restart</pre>
+    </div>
+    <div class="card"><h3>Cowork</h3>
+      <p>Re-open the updated <code>cowork/*.skill</code> file and click <strong>Save skill</strong> → <strong>Upload and replace</strong>. That swaps in the new version.</p>
+    </div>
+  </div>
+  <div class="warnbox">The marketplace <strong>cache</strong> is what needs refreshing — just clicking “install” again can reuse a stale copy. Re-adding the marketplace (or <code>marketplace update</code>) guarantees the latest.</div>
+
+  <h2 id="workflow">The build workflow</h2>
+  <p>Plan once, then let stages run — each in its own fresh context. Does each command stop or keep going?</p>
+  <table>
+    <tr><th>Command</th><th>What it does</th><th>Stops for you?</th></tr>
+    <tr><td><code>/plan</code></td><td>writes the plan; builds nothing</td><td><strong>Stops</strong> — review, then <code>/stage</code> or <code>/build-all</code></td></tr>
+    <tr><td><code>/stage N</code></td><td>runs one stage, then stops</td><td><strong>Stops after each stage</strong> (manual)</td></tr>
+    <tr><td><code>/build-all</code></td><td>runs all stages, narrating each</td><td class="ok">Auto-continues; checkpoints don't wait; halts only on failure</td></tr>
+    <tr><td><code>/build-all-auto</code></td><td>runs all stages silently</td><td class="ok">Auto-continues to the end; halts only on failure</td></tr>
+    <tr><td><code>/review</code></td><td>reviews your diff</td><td><strong>Stops</strong> with a verdict</td></tr>
+    <tr><td><code>/ship</code></td><td>pre-commit checklist, then commit</td><td><strong>Waits</strong> for your go-ahead</td></tr>
+  </table>
+  <div class="note"><strong>Checkpoints don't need input</strong> — they're status messages; the run continues on
+  its own. The only workflow-level stops are a <strong>failed exit criterion</strong> or an explicit pause
+  request. For a truly hands-off run, set the app to <strong>Auto</strong> permission mode so it doesn't pause
+  for tool-approval prompts.</div>
+  <p>In <strong>Cowork</strong>, the <code>bounded-build</code> skill runs the same loop — invoke it by describing
+  the build, and add “run all stages” for full-auto.</p>
+
+  <h2 id="why">Why it saves tokens and keeps intelligence</h2>
+  <p>In a long session, every message re-processes the whole accumulated context — cost climbs and quality
+  degrades as the window fills (“context rot”). Running each stage in a <strong>subagent</strong> fixes both:
+  the subagent spends its tokens in its own fresh context and returns only a short summary, so your main
+  thread stays small, cheap, and in the high-quality band.</p>
+  <table>
+    <tr><th></th><th>One long session</th><th>Subagent per stage</th></tr>
+    <tr><td>Main context by late stages</td><td>large &amp; climbing</td><td class="ok">small &amp; flat</td></tr>
+    <tr><td>Re-processing old bulk each turn</td><td class="no">yes</td><td class="ok">no</td></tr>
+    <tr><td>Quality late in the build</td><td class="no">degrades</td><td class="ok">preserved</td></tr>
+  </table>
+  <p class="note">Honest framing: the subagents still spend tokens doing the work — the win is that the
+  <strong>main thread stays cheap</strong> and <strong>quality is preserved</strong>. The bigger the job, the
+  larger the gap. For tiny one-shot tasks, skip it — the overhead isn't worth it.</p>
+
+  <h2 id="trouble">Troubleshooting</h2>
+  <ul>
+    <li><strong>A new command doesn't appear</strong> — fully quit and reopen the app (not just the tab).</li>
+    <li><strong><code>claude plugin list</code> says “disabled”</strong> — that CLI status is unreliable; the authoritative signal is <code>enabledPlugins: true</code> in <code>~/.claude/settings.json</code>. Confirm in the app by typing <code>/</code>, or via <span class="kbd">+</span> → Plugins.</li>
+    <li><strong>“Replace skill?” when saving a Cowork skill</strong> — expected if it's already saved; safe to Cancel or replace. You only need to save each <code>.skill</code> once.</li>
+    <li><strong><code>/agents</code>, <code>/config</code>, <code>/permissions</code>, <code>/doctor</code> “isn't available”</strong> — those are terminal-only dialogs; manage them via <strong>Customize</strong> in the sidebar and Settings.</li>
+    <li><strong>Windows, first Code-tab launch fails</strong> — install Git for Windows, then restart the app.</li>
+    <li><strong>Build stops mid-run</strong> — that's the gate: a stage failed its exit criterion. Fix it, then re-run <code>/build-all</code> to resume.</li>
+  </ul>
+
+  <footer>
+    <p><strong>Links.</strong>
+      Repo: <a href="https://github.com/justinw916-sketch/SuperClaudePublic">SuperClaudePublic</a> ·
+      Rendered docs: <a href="https://justinw916-sketch.github.io/SuperClaudePublic/">GitHub Pages</a> ·
+      Code-tab guide: <a href="using-in-claude-code-desktop.html">using-in-claude-code-desktop.html</a> ·
+      Scheduled tasks: <a href="scheduled-task-recipes.html">scheduled-task-recipes.html</a>.</p>
+    <p><strong>Sources.</strong>
+      <a href="https://code.claude.com/docs/en/desktop">Claude Code Desktop app</a> ·
+      <a href="https://code.claude.com/docs/en/plugins">Plugins</a> ·
+      <a href="https://code.claude.com/docs/en/hooks">Hooks</a>. Context-rot framing per Chroma “Context Rot” (2025) and Anthropic “Effective context engineering.”</p>
+    <p>Claude Code Toolkit — Deploy &amp; Share · v2.3.0 · covers Code tab + Cowork.</p>
+  </footer>
+
+</div>
+</body>
+</html>

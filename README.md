@@ -113,6 +113,10 @@ visual guides are live at:
 (Source files: [`docs/using-in-claude-code-desktop.html`](docs/using-in-claude-code-desktop.html),
 [`docs/scheduled-task-recipes.html`](docs/scheduled-task-recipes.html).)
 
+## Deploy & Share guide
+
+See [`docs/deploy-and-share.html`](docs/deploy-and-share.html) — a full HTML guide covering both surfaces (Code tab + Cowork), deploying on your machines, sharing with others, and updating.
+
 ## Deploy prompt
 
 See [`DEPLOY.md`](DEPLOY.md) for step-by-step deployment, or paste
