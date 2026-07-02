@@ -2,7 +2,7 @@
 
 All notable changes to the Claude Code Toolkit (public edition).
 
-## [2.1.0] — Desktop-app-first edition
+## [2.2.0] — Desktop-app-first edition
 
 A plugin-first Claude Code toolkit built for the **Claude Desktop app (Code tab)**.
 Install it from the Plugin manager — no terminal, no CLI required. Identity is a
@@ -11,6 +11,7 @@ fill-in template, so you can make it your own.
 ### Included
 - **Zero-config rules:** the operating rules auto-load every session via the plugin SessionStart hook — no `~/.claude/CLAUDE.md` editing required (that file is optional personalization).
 - **Bounded-build workflow:** `/plan /stage /handoff /verify /reset /ship /trim`.
+- **Auto-advance:** /build-all runs each remaining stage in its own fresh-context subagent (stage-runner), checkpointing between stages and halting on failure.
 - **In-session `/review`** + `review-agent` subagent — reviews your working diff
   in the Code tab and emits an APPROVE / REQUEST_CHANGES / REJECT verdict. No CI,
   no network; the review is entirely local.
