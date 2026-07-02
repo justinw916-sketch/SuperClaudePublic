@@ -246,6 +246,27 @@
   every stage as it happens), <strong>automatic once the plan is proven</strong>. Either way a failed stage
   stops the line — fix it, then re-run <code>/build-all</code> to resume where it left off.</div>
 
+  <h3>Does each command stop or keep going?</h3>
+  <p>The build-flow commands differ in whether they hand control back to you. Checkpoints in
+  <code>/build-all</code> are <strong>informational — they do not wait for input</strong>; only a failed
+  stage or an explicit pause request stops an auto-run.</p>
+  <table>
+    <tr><th>Command</th><th>What it does</th><th>Stops for you?</th></tr>
+    <tr><td><code>/plan</code></td><td>writes the plan; builds nothing</td><td><strong>Stops</strong> — review, then run <code>/stage</code> or <code>/build-all</code></td></tr>
+    <tr><td><code>/stage N</code></td><td>runs one stage, then stops</td><td><strong>Stops after each stage</strong> — you invoke the next (manual mode)</td></tr>
+    <tr><td><code>/handoff</code></td><td>writes resume state to <code>BUILD_STATE.md</code></td><td><strong>Stops</strong> (utility)</td></tr>
+    <tr><td><code>/verify</code></td><td>checks against acceptance criteria</td><td><strong>Stops</strong> with a report</td></tr>
+    <tr><td><code>/build-all</code></td><td>runs all remaining stages, narrating each</td><td class="ok">Auto-continues — checkpoints don't wait; halts only on failure (or if you ask it to pause)</td></tr>
+    <tr><td><code>/build-all-auto</code></td><td>runs all remaining stages silently</td><td class="ok">Auto-continues to the end; halts only on failure</td></tr>
+    <tr><td><code>/review</code></td><td>reviews your diff, emits a verdict</td><td><strong>Stops</strong> with the verdict; you decide</td></tr>
+    <tr><td><code>/ship</code></td><td>pre-commit checklist, then commit</td><td><strong>Waits</strong> for your go-ahead before committing</td></tr>
+    <tr><td><code>/reset</code>, <code>/trim</code></td><td>reset / compress context</td><td>utility — no building</td></tr>
+  </table>
+  <div class="note"><strong>Separate from the workflow:</strong> the desktop app may still show
+  <strong>tool-permission prompts</strong> (file writes, running commands) for any command that changes
+  things — regardless of which command. Switch the app to <strong>Auto</strong> permission mode for a truly
+  hands-off run; otherwise you'll approve those prompts even during <code>/build-all-auto</code>.</div>
+
   <h2>Review before every commit</h2>
   <p>The Desktop Code tab can't run headless <code>claude -p</code>, so instead of a background git hook
   the toolkit reviews <strong>in your session</strong>, where you can see the diff and approve.</p>
