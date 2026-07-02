@@ -28,9 +28,10 @@ Everything here is designed for the **Claude Desktop app -> Code tab**.
 | Layer | Ships as | Delivered by |
 |-------|----------|--------------|
 | Bounded-build workflow | `/plan` `/stage` `/handoff` `/verify` `/reset` `/ship` `/trim` | plugin `commands/` |
+| Auto-advance builds | `/build-all` (checkpoint) + `/build-all-auto` (full-auto) — a fresh subagent per stage | plugin `commands/`, `agents/` |
 | In-session code review | `/review` skill + `review-agent` subagent | plugin `skills/`, `agents/` |
 | Operating rules | `operating-rules` skill + `terse-engineer` output style | plugin + `reference/` |
-| Tailored subagents | planner, verifier, researcher, debugger, security-reviewer, network-infra, web-cloudflare | plugin `agents/` |
+| Tailored subagents | planner, verifier, researcher, debugger, security-reviewer, network-infra, web-cloudflare, stage-runner | plugin `agents/` |
 | Safety hooks | destructive-command guard, secret-scan, session primer | plugin `hooks/` |
 | Always-on rules | auto-injected each session (SessionStart hook) — zero setup | plugin `hooks/` |
 
