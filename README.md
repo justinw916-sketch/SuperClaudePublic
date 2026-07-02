@@ -118,3 +118,19 @@ visual guides are live at:
 See [`DEPLOY.md`](DEPLOY.md) for step-by-step deployment, or paste
 [`deploy-prompt.txt`](deploy-prompt.txt) into Claude Code on a new machine to have
 it set everything up for you.
+
+---
+
+## Using it in Cowork (not the Code tab)
+
+The plugin's slash commands (`/plan`, `/build-all`, `/review`) are for the **Code tab**. For
+**Cowork** (the desktop app's agent mode, where those slash commands don't apply), this repo also
+ships companion **skills** in [`cowork/`](cowork/):
+
+- **bounded-build** — the same context-saving loop (plan to disk, run each stage in its own
+  subagent) as a Cowork skill.
+- **code-review** — in-session review of your working git diff, with an
+  APPROVE / REQUEST_CHANGES / REJECT verdict.
+
+Install by opening a `cowork/*.skill` file in Cowork and clicking **Save skill**. Details in
+[`cowork/README.md`](cowork/README.md).
