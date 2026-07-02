@@ -201,6 +201,37 @@
   <div class="note">The single most important habit: <strong>one stage per session</strong>. If a stage
   feels bigger than one context window, split it in the plan first.</div>
 
+  <h2>Auto-advance the whole build — <code>/build-all</code></h2>
+  <p>Running <code>/stage 1</code> → <code>/clear</code> → <code>/stage 2</code> by hand is safe but tedious.
+  <code>/build-all</code> automates it <em>without</em> reintroducing context rot: it hands each stage to a
+  fresh <code>stage-runner</code> <strong>subagent</strong>, so every stage still gets its own clean context —
+  the subagent boundary replaces <code>/clear</code>. Your main session only collects short summaries.</p>
+  <div class="card">
+    <p><strong>How it runs:</strong></p>
+    <ul>
+      <li>reads <code>BUILD_PLAN.md</code> / <code>BUILD_STATE.md</code> and finds the remaining stages
+        (start anywhere with <code>/build-all 3</code>);</li>
+      <li>runs each stage in its own <code>stage-runner</code> subagent, posts a 2–3 line checkpoint, and
+        continues automatically on success;</li>
+      <li><strong>halts immediately</strong> if a stage's exit criterion isn't met, it hits a blocker, or the
+        stage is too big to fit one context — it never papers over a failure;</li>
+      <li>runs <code>/verify</code> against the acceptance criteria at the end.</li>
+    </ul>
+    <p>Watch progress in the <strong>subagent / tasks</strong> pane. For a hands-off run, switch the app to
+    <strong>Auto</strong> permission mode so it doesn't pause for tool approvals each stage.</p>
+  </div>
+  <h3>Automatic (<code>/build-all</code>) vs manual (<code>/stage</code> + <code>/clear</code>)</h3>
+  <table>
+    <tr><th>Use automatic <code>/build-all</code> when…</th><th>Drive it manually when…</th></tr>
+    <tr><td>the plan is solid and the stages are well-scoped</td><td>the plan is exploratory or likely to change between stages</td></tr>
+    <tr><td>stages are independent and low-risk</td><td>a stage makes irreversible or high-stakes changes (migrations, deploys, deletes)</td></tr>
+    <tr><td>you want to walk away and let it run</td><td>you want to review and steer after each stage</td></tr>
+    <tr><td>it's a repeatable build you've run before</td><td>it's a brand-new build and you're still learning the shape of the work</td></tr>
+  </table>
+  <div class="note">Rule of thumb: <strong>manual for the first pass</strong> of an unfamiliar build (you see
+  every stage as it happens), <strong>automatic once the plan is proven</strong>. Either way a failed stage
+  stops the line — fix it, then re-run <code>/build-all</code> to resume where it left off.</div>
+
   <h2>Review before every commit</h2>
   <p>The Desktop Code tab can't run headless <code>claude -p</code>, so instead of a background git hook
   the toolkit reviews <strong>in your session</strong>, where you can see the diff and approve.</p>
@@ -222,10 +253,12 @@
   <table>
     <tr><th>Piece</th><th>Type</th><th>Use</th></tr>
     <tr><td><code>/plan /stage /handoff /verify /reset /ship /trim</code></td><td>commands</td><td>the bounded-build workflow</td></tr>
+    <tr><td><code>/build-all</code></td><td>command</td><td>auto-advance every remaining stage (a fresh subagent per stage)</td></tr>
     <tr><td><code>/review</code></td><td>skill</td><td>in-session pre-commit review</td></tr>
     <tr><td><code>bounded-build</code>, <code>operating-rules</code></td><td>skills</td><td>protocol + rules of engagement</td></tr>
     <tr><td>planner · verifier · researcher · debugger</td><td>subagents</td><td>plan, verify, research, debug in isolated context</td></tr>
     <tr><td>security-reviewer · review-agent</td><td>subagents</td><td>second-opinion security/code review</td></tr>
+    <tr><td>stage-runner</td><td>subagent</td><td>runs one stage in an isolated context (used by <code>/build-all</code>)</td></tr>
     <tr><td>network-infra · web-cloudflare</td><td>subagents</td><td>network &amp; edge experts</td></tr>
     <tr><td>danger-check · secret-scan · session-start</td><td>hooks</td><td>block destructive commands, block secret writes, prime each session</td></tr>
     <tr><td>terse-engineer</td><td>output style</td><td>direct, rules-baked-in voice</td></tr>

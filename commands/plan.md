@@ -28,6 +28,11 @@ Break the build into stages where each one satisfies the sizing heuristics from 
 Prefer MORE, SMALLER stages over fewer large ones. A 12-stage plan that each run finishes
 cleanly beats a 5-stage plan where stage 3 blows the context window.
 
+**Make every exit criterion machine-checkable.** Each stage's exit criterion must be an
+unambiguous PASS/FAIL a command or inspection can confirm — e.g. `npm test` passes, `GET /health`
+returns 200, `dist/app.js` exists. Vague criteria ("looks done") cannot be gated: `/build-all`
+halts on any stage whose criterion it can't confirm met, so fuzzy criteria break hands-off runs.
+
 ## 4. Write BUILD_PLAN.md
 Create `BUILD_PLAN.md` in the working directory with this structure:
 
